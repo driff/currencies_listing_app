@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_nav"
+    app:startDestination="@id/currenciesFragment">
+    <fragment
+        android:id="@+id/currenciesFragment"
+        android:name="com.example.listing.presentation.CurrenciesFragment"
+        android:label="CurrenciesFragment" >
+        <action
+            android:id="@+id/action_currenciesFragment_to_currencyDetailsFragment"
+            app:destination="@id/currencyDetailsFragment"
+            app:popUpTo="@+id/currenciesFragment" />
+        <argument
+            android:name="user_credentials"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/currencyDetailsFragment"
+        android:name="com.example.listing.presentation.CurrencyDetailsFragment"
+        android:label="CurrencyDetailsFragment" />
+</navigation>
