@@ -1,7 +1,5 @@
 package com.example.listing.core.domain
 
-
-import com.example.listing.core.domain.Currency
 import com.google.gson.annotations.SerializedName
 
 data class Mindicador(

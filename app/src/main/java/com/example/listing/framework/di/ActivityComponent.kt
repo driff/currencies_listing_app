@@ -4,7 +4,7 @@ import com.example.listing.presentation.MainActivity
 import dagger.Subcomponent
 
 @PerActivity
-@Subcomponent(modules = [])
+@Subcomponent(modules = [RepositoriesModule::class])
 interface ActivityComponent {
 
     @Subcomponent.Factory
@@ -13,4 +13,5 @@ interface ActivityComponent {
     }
 
     fun inject(mainActivity: MainActivity)
+    fun fragmentComponent(): FragmentsComponent.Factory
 }

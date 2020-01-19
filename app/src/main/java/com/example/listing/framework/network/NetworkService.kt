@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface NetworkService {
 
-    @GET("api/v1/counters")
+    @GET("api")
     fun fetchCounters(): Single<Mindicador>
 
 }

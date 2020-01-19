@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.listing.presentation.LoginFragment"
+        android:name="com.example.listing.presentation.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
         <action
@@ -14,19 +14,34 @@
             app:destination="@id/signupFragment"
             app:popUpTo="@+id/loginFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_currenciesFragment"
-            app:destination="@+id/main_nav"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
+            android:id="@+id/action_loginFragment_to_currencies_graph"
+            app:destination="@id/currencies_graph"
             app:launchSingleTop="true"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/login_nav"
+            app:popUpTo="@+id/main_nav"
             app:popUpToInclusive="true" />
     </fragment>
+    <navigation android:id="@+id/currencies_graph" app:startDestination="@id/currenciesFragment">
+        <fragment
+            android:id="@+id/currenciesFragment"
+            android:name="com.example.listing.presentation.currency.CurrenciesFragment"
+            android:label="CurrenciesFragment" >
+            <action
+                android:id="@+id/action_currenciesFragment_to_currencyDetailsFragment"
+                app:destination="@id/currencyDetailsFragment"
+                app:popUpTo="@+id/currenciesFragment" />
+            <argument
+                android:name="user_credentials"
+                app:argType="string"
+                android:defaultValue="a" />
+        </fragment>
+        <fragment
+            android:id="@+id/currencyDetailsFragment"
+            android:name="com.example.listing.presentation.currency.CurrencyDetailsFragment"
+            android:label="CurrencyDetailsFragment" />
+    </navigation>
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.example.listing.presentation.SignupFragment"
+        android:name="com.example.listing.presentation.login.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" >
         <argument
@@ -38,5 +53,4 @@
             app:argType="string"
             app:nullable="true" />
     </fragment>
-    <include app:graph="@navigation/main_nav" />
 </navigation>

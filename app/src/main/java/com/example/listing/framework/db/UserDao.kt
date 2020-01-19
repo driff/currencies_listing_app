@@ -1,0 +1,18 @@
+package com.example.listing.framework.db
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.Query
+import io.reactivex.Single
+
+@Dao
+interface UserDao {
+
+    @Insert(onConflict = REPLACE)
+    fun addUser(user: UserEntity)
+
+    @Query("SELECT * FROM user WHERE email like :email")
+    fun getUser(email: String): Single<UserEntity>
+
+}
