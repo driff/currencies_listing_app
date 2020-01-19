@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.listing.R
 import com.example.listing.framework.ViewModelFactory
 import com.example.listing.framework.di.FragmentsComponent
 import com.example.listing.presentation.MainActivity
+import kotlinx.android.synthetic.main.fragment_signup.*
 import javax.inject.Inject
 
 /**
@@ -39,6 +41,15 @@ class SignupFragment : Fragment() {
         }
         findNavController().addOnDestinationChangedListener { controller, destination, arguments ->
             Log.d("LoginFragment", "controller: ${controller.currentDestination.toString()} destination: ${destination.navigatorName}") }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bnSignUp.setOnClickListener {
+            Log.d("Signup", "signup Click")
+            viewModel.addUser(edEmail.text.toString(), edPassword.text.toString(), edName.text.toString())
+        }
+        viewModel.createdUser.observe(this, Observer { findNavController().navigateUp() })
     }
 
     override fun onResume() {

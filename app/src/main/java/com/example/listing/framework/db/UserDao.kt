@@ -12,7 +12,7 @@ interface UserDao {
     @Insert(onConflict = REPLACE)
     fun addUser(user: UserEntity)
 
-    @Query("SELECT * FROM user WHERE email like :email")
+    @Query("SELECT * FROM user WHERE email is :email")
     fun getUser(email: String): Single<UserEntity>
 
 }

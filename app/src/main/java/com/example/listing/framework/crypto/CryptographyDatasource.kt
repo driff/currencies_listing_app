@@ -57,7 +57,7 @@ class CryptographyDatasource @Inject constructor(): CryptoDataSource {
 
     @Throws(Exception::class)
     private fun generateKey(): Key? {
-        val factory: SecretKeyFactory = SecretKeyFactory.getInstance("i_am_a_secret_01234321")
+        val factory: SecretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
         val password = PASSWORD.toCharArray()
         val salt = getBytes(SALT)
         val spec: KeySpec = PBEKeySpec(password, salt, 65536, 256)

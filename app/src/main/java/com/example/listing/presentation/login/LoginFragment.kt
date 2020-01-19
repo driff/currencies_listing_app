@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.listing.R
 import com.example.listing.framework.ViewModelFactory
@@ -39,11 +40,20 @@ class LoginFragment : Fragment() {
             Log.d("LoginFragment", "controller: ${controller.currentDestination.toString()} destination: ${destination.navigatorName}") }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.loggedUser.observe(this, Observer {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToCurrenciesGraph())
+        })
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val mainActivity = activity as MainActivity
+        mainActivity.supportActionBar?.hide()
         bnLogin.setOnClickListener {
             Log.d("LoginFragment", "BnLoginClick")
-            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToCurrenciesGraph())
+            viewModel.verifyLogin(edEmail.text.toString(), edPassword.text.toString())
         }
 
         bnSignup.setOnClickListener {

@@ -2,6 +2,7 @@ package com.example.listing.presentation.currency
 
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listing.R
 import com.example.listing.core.domain.Currency
@@ -23,8 +25,9 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class CurrenciesFragment : Fragment(), CurrencyAdapter.Listener {
+class CurrenciesFragment : Fragment() {
 
+    private val TAG = this.javaClass.canonicalName
     private val disposables = CompositeDisposable()
 
     lateinit var fragmentComponent: FragmentsComponent
@@ -33,7 +36,8 @@ class CurrenciesFragment : Fragment(), CurrencyAdapter.Listener {
     lateinit var viewModelFactory: ViewModelFactory<CurrencyViewModel>
     @Inject
     lateinit var adapterClickListener: AdapterClickListener
-
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
     @Inject
     lateinit var currencyAdapter: CurrencyAdapter
 
@@ -51,6 +55,12 @@ class CurrenciesFragment : Fragment(), CurrencyAdapter.Listener {
         fragmentComponent.inject(this).also {
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrencyViewModel::class.java)
         }
+        disposables.add(adapterClickListener.onCurrencySelected.subscribe({
+            Log.i("CurrenciesFragment", "Currency: $it")
+            onClick(it)
+        }, {
+            Log.e(TAG, "Error ", it)
+        }))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,22 +70,29 @@ class CurrenciesFragment : Fragment(), CurrencyAdapter.Listener {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = currencyAdapter
         }
-        disposables.add(adapterClickListener.onCurrencySelected.subscribe{
-            // TODO: Open detail view
-            Log.i("CurrenciesFragment", "Currency: $it")
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val mainActivity = activity as MainActivity
+        val username = sharedPreferences.getString("name", "")
+        mainActivity.supportActionBar?.apply {
+            show()
+            title = String.format("Hola %s", username)
+        }
         viewModel.currencies.observe(this, Observer {
             currencyAdapter.addCurrencies(it)
         })
     }
 
-    override fun onClick(currency: Currency) {
-        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun onClick(currency: Currency) {
+        Log.d("CurrenciesFragment", "Click")
+        viewModel.selectedCurrency(currency)
+        findNavController().navigate(CurrenciesFragmentDirections.actionCurrenciesFragmentToCurrencyDetailsFragment())
     }
 
-
+    override fun onDestroy() {
+        disposables.clear()
+        super.onDestroy()
+    }
 }
