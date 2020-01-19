@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.listing.R
 import com.example.listing.core.domain.Currency
 import com.example.listing.framework.ViewModelFactory
-import com.example.listing.framework.di.FragmentsComponent
 import com.example.listing.presentation.MainActivity
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_currencies.*
@@ -30,12 +29,9 @@ class CurrenciesFragment : Fragment() {
     private val TAG = this.javaClass.canonicalName
     private val disposables = CompositeDisposable()
 
-    lateinit var fragmentComponent: FragmentsComponent
     lateinit var viewModel: CurrencyViewModel
     @Inject
     lateinit var viewModelFactory: ViewModelFactory<CurrencyViewModel>
-    @Inject
-    lateinit var adapterClickListener: AdapterClickListener
     @Inject
     lateinit var sharedPreferences: SharedPreferences
     @Inject
@@ -51,16 +47,25 @@ class CurrenciesFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        fragmentComponent = (activity!! as MainActivity).activityComponent.fragmentComponent().create()
-        fragmentComponent.inject(this).also {
-            viewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrencyViewModel::class.java)
+        (activity!! as MainActivity).activityComponent.inject(this).also {
+                viewModel = ViewModelProviders.of(this, viewModelFactory).get(CurrencyViewModel::class.java)
         }
-        disposables.add(adapterClickListener.onCurrencySelected.subscribe({
+        disposables.add(currencyAdapter.getCurrencySelectedObs().subscribe({
             Log.i("CurrenciesFragment", "Currency: $it")
             onClick(it)
         }, {
             Log.e(TAG, "Error ", it)
         }))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).apply {
+            supportActionBar?.apply{
+                setDefaultDisplayHomeAsUpEnabled(false)
+                setDisplayHomeAsUpEnabled(false)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,6 +92,7 @@ class CurrenciesFragment : Fragment() {
 
     fun onClick(currency: Currency) {
         Log.d("CurrenciesFragment", "Click")
+        Log.d(TAG, "viewmodel: $viewModel")
         viewModel.selectedCurrency(currency)
         findNavController().navigate(CurrenciesFragmentDirections.actionCurrenciesFragmentToCurrencyDetailsFragment())
     }

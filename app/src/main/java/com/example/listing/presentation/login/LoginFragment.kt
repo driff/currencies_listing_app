@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.listing.R
 import com.example.listing.framework.ViewModelFactory
-import com.example.listing.framework.di.FragmentsComponent
 import com.example.listing.presentation.MainActivity
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
@@ -22,7 +21,6 @@ class LoginFragment : Fragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelFactory<LoginViewModel>
     private lateinit var viewModel: LoginViewModel
-    lateinit var fragmentComponent: FragmentsComponent
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,8 +30,8 @@ class LoginFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        fragmentComponent = (activity!! as MainActivity).activityComponent.fragmentComponent().create()
-        fragmentComponent.inject(this).also {
+        (activity!! as MainActivity).activityComponent.inject(this)
+        .also {
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
         }
         findNavController().addOnDestinationChangedListener { controller, destination, arguments ->
