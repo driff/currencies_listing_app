@@ -8,7 +8,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/tlEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -28,16 +28,15 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
+        android:id="@+id/tlPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:hint="password"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="@+id/tlEmail"
         app:layout_constraintHorizontal_bias="0.363"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-        app:passwordToggleEnabled="true"
+        app:layout_constraintStart_toStartOf="@+id/tlEmail"
+        app:layout_constraintTop_toBottomOf="@+id/tlEmail"
         app:passwordToggleTintMode="src_over">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,9 +55,9 @@
         android:layout_marginTop="24dp"
         android:elegantTextHeight="true"
         android:text="Login"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintEnd_toEndOf="@+id/tlPassword"
+        app:layout_constraintStart_toStartOf="@+id/tlPassword"
+        app:layout_constraintTop_toBottomOf="@+id/tlPassword" />
 
     <Button
         android:id="@+id/bnSignup"

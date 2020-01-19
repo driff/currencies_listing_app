@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -75,6 +76,10 @@ class CurrenciesFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = currencyAdapter
         }
+
+        edFilter.doOnTextChanged { text, start, count, after ->
+            viewModel.filterCurrencies(text)
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -86,6 +91,9 @@ class CurrenciesFragment : Fragment() {
             title = String.format("Hola %s", username)
         }
         viewModel.currencies.observe(this, Observer {
+            currencyAdapter.addCurrencies(it)
+        })
+        viewModel.filteredCurrencies.observe(this, Observer {
             currencyAdapter.addCurrencies(it)
         })
     }

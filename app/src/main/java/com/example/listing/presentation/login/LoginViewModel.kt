@@ -26,6 +26,7 @@ class LoginViewModel @Inject constructor(private val cryptoRepository: CryptoRep
 
     val loggedUser: MutableLiveData<User> = MutableLiveData()
     val createdUser: MutableLiveData<User> = MutableLiveData()
+    val failedLogin: MutableLiveData<String> = MutableLiveData()
     private val disposable = CompositeDisposable()
 
     fun verifyLogin(email: String, password: String) {
@@ -38,7 +39,7 @@ class LoginViewModel @Inject constructor(private val cryptoRepository: CryptoRep
             }
             loggedUser.postValue(it)
         }, {
-                Log.e("LoginViewmodel", "Error on login", it)
+                failedLogin.postValue("Verify email and password")
         }))
     }
 

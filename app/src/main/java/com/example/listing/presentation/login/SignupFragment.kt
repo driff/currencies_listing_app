@@ -44,12 +44,23 @@ class SignupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bnSignUp.setOnClickListener {
             Log.d("Signup", "signup Click")
-            viewModel.addUser(edEmail.text.toString(), edPassword.text.toString(), edName.text.toString())
+            val email = edEmail.text.toString().trim()
+            val password = edPassword.text.toString().trim()
+            val name = edName.text.toString().trim()
+            if (email.isEmpty()) {
+                tlEmail.isErrorEnabled = true
+                tlEmail.error = "Write an Email"
+            } else if(password.isEmpty()) {
+                tlPassword.isErrorEnabled = true
+                tlPassword.error = "Write a Password"
+            } else if(name.isEmpty()) {
+                tlName.isErrorEnabled = true
+                tlName.error = "Write a name"
+            } else
+                viewModel.addUser(email, password, name)
+
         }
         viewModel.createdUser.observe(this, Observer { findNavController().navigateUp() })
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
 }
