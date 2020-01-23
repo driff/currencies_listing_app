@@ -26,6 +26,7 @@ class LoginViewModel @Inject constructor(private val cryptoRepository: CryptoRep
 
     val loggedUser: MutableLiveData<User> = MutableLiveData()
     val createdUser: MutableLiveData<User> = MutableLiveData()
+    val updatedUser: MutableLiveData<User> = MutableLiveData()
     val failedLogin: MutableLiveData<String> = MutableLiveData()
     private val disposable = CompositeDisposable()
 
@@ -52,6 +53,16 @@ class LoginViewModel @Inject constructor(private val cryptoRepository: CryptoRep
                 Log.e("LoginViewmodel", "Error creating user", it)
             })
         )
+    }
+
+    fun recoverPassword(email: String, password: String) {
+        disposable.add(loginRepository.recoverPassword(email, password)
+            .subscribe({
+                Log.d("LoginViewmodel", "User: $it")
+                updatedUser.postValue(it)
+            }, {
+                failedLogin.postValue("Check email and try again")
+            }))
     }
 
     override fun onCleared() {

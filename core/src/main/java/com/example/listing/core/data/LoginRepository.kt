@@ -9,4 +9,6 @@ class LoginRepository (private val datasource: UserDatasource) {
 
     fun verifyUser(email: String, password: String): Single<User> = datasource.verifyUser(email, password)
 
+    fun recoverPassword(email: String, password: String): Single<User> = datasource.recoverPassword(email, password)
+
 }

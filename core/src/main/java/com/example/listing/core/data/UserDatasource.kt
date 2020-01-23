@@ -9,4 +9,6 @@ interface UserDatasource {
 
     fun verifyUser(email: String, password: String): Single<User>
 
+    fun recoverPassword(email: String, password: String): Single<User>
+
 }

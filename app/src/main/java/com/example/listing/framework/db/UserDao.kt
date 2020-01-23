@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import androidx.room.Update
 import io.reactivex.Single
 
 @Dao
@@ -14,5 +15,8 @@ interface UserDao {
 
     @Query("SELECT * FROM user WHERE email is :email")
     fun getUser(email: String): Single<UserEntity>
+
+    @Update
+    fun updateUser(updatedUser: UserEntity)
 
 }

@@ -65,7 +65,9 @@ class LoginFragment : Fragment() {
             Log.d("LoginFragment", "BnLoginClick")
             viewModel.verifyLogin(edEmail.text.toString(), edPassword.text.toString())
         }
-
+        bnRecover.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRecoverPassword())
+        }
         bnSignup.setOnClickListener {
             findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSignupFragment(edEmail.text.toString(), edPassword.text.toString()))
         }

@@ -13,6 +13,22 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class UserDataSource @Inject constructor(private val db: ListingDatabase, private val cryptoRepository: CryptoRepository): UserDatasource {
+    override fun recoverPassword(email: String, password: String): Single<User> {
+        return Single.fromObservable(db.userDao().getUser(email)
+            .map {
+                val encryptedPassword = cryptoRepository.encryptString(password)
+                if (!encryptedPassword.isNullOrEmpty()) {
+                    return@map it.copy(password = encryptedPassword)
+                } else
+                    return@map null
+            }.toObservable()
+            .concatMap {
+                db.userDao().updateUser(it)
+                return@concatMap Observable.just(User(it.email, it.password, it.name))
+            }
+        ).subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+    }
 
     private fun getUser(email: String): Single<UserEntity> = db.userDao().getUser(email)
 
